@@ -1,3 +1,5 @@
+const { Console } = require('console');
+
 require('dotenv').config('/.env') ;
 
 //modules
@@ -7,9 +9,14 @@ const
     glob = require('glob'),
     cors = require('cors'),
     exceptions = require('./app/utils/userFacingErrors'),
+    {init} = require('./app/utils/init'),  //this is simply to initialize the db data to simplify app the testing
     path = require('path');
 
 
+// load write the test data in to db
+(async() =>{
+    await init() ;
+})() ;
 
 // variables
 const 
