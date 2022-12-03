@@ -7,7 +7,7 @@ const
     db = new PrismaClient();
 
 
-exports.listJoke = async (limit = 20, offset = 0, filters ={}) =>{
+exports.listJoke = async (limit = 20, offset = 0) =>{
     let count = await db.joke.count() ;
     let result = await db.joke.findMany({
         take: limit,
@@ -39,7 +39,8 @@ exports.getJoke = async (jokeId) => {
 
 /**
  * Return a randomized joke 
- * @param host
+ * @param {string} host
+ * @param {string} userAgent
  */
 exports.getRandomJoke = async (host, userAgent)=> {
     let 
@@ -59,7 +60,6 @@ exports.getRandomJoke = async (host, userAgent)=> {
         pages = (count <= 100)? 0 : Math.trunc(count/maxSize),
         randomOffset = (pages > 0)? Math.floor(Math.random() * (pages)) : 0;
 
-    console.log({"count":count,"usedJokesSize":usedJokes.length, "number of pages":pages, "randomOffset":randomOffset}) ;
 
     let result = await db.joke.findMany({
         take: maxSize,
@@ -74,7 +74,7 @@ exports.getRandomJoke = async (host, userAgent)=> {
     let 
         randomIndex = Math.floor(Math.random() * result.length),
         randomJoke = result[(randomIndex >= result.length)? 0: randomIndex] ;
-    console.log(randomIndex, result.length) ;
+    
     usedJokes.push(randomJoke.id) ;
 
     cache.set(`used-jokes-${host}-${userAgent}`, usedJokes) ;
