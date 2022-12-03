@@ -5,11 +5,31 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//TODO: With the goal to simplify the evaluation of this assigment
+// I have add several configurations to this file so the evaluator can pick wich 
+// database to use (say allready has a local mysql server runnig then can set here that avoid installing new server )
+// Below you can find configurations for postgres, mysql and sqlite
+// Only 1 configuration must be active (in a real project there is only 1)
+// 1. posgress is default nothing to do
+// 2. mysql comment the postgres config and uncomment the mysql
+// 3. for sqlite uncomment the sqlite configurtation and comment the others
+// in addition must also comment the model definition used por postgres and mysql and
+// uncomment the sqlite model
+
+//configuration to use with postgress 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL_POSTGRESS")
 }
 
+//configuration tu use with mysql 
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL_MYSQL")
+// }
+
+// this model definition is for postgres and mysql
+// if shoose to use sqlite then comment this model and uncoment the sqlite one
 model Joke {
   @@map("jokes")
   id          Int      @id @default(autoincrement())
@@ -17,3 +37,20 @@ model Joke {
   setup       String   @db.VarChar(255)
   punchline   String   @db.VarChar(255)
 }
+
+//configuration tu use with sqlite 
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:../../Database/accurate.db"
+// }
+
+
+// this is sqlite model definition, in case of using sqlite configuration
+// uncomment the model below and comment the avobe model used for postgres and mysql
+// model Joke {
+//   @@map("jokes")
+//   id          Int      @id @default(autoincrement())
+//   type        String   
+//   setup       String   
+//   punchline   String   
+// }
