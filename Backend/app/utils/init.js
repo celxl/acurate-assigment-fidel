@@ -1,7 +1,11 @@
+/**
+ * This file is a simple utility to write data in dev when running the app to 
+ * simply load the require data in db.
+ */
+
 const 
     { PrismaClient } = require('@prisma/client'),
-    db = new PrismaClient(), 
-    axios = require('axios') ;
+    db = new PrismaClient();
 
 // The json obj of github link
 const data = [
@@ -2410,7 +2414,7 @@ const data = [
 exports.init = async() => {
     let jokes = await db.joke.count() ;
     let repeated = [] ;
-    let clean = []
+    let clean = [] ;
 
     while(data.length){
         let joke = data.shift();
@@ -2422,14 +2426,34 @@ exports.init = async() => {
             clean.push(joke) ;
         }
     }
-    if(repeated.length > 0)
-        console.log('Data from github link had duplicated elements, DB Initialized without them ',repeated, clean.length) ;
+
+    
 
     if(jokes != clean.length){
-        console.log('Writing jokes in db')
-        await db.joke.createMany({
-            data: clean
-        })
+        if(repeated.length > 0)
+            console.log(
+                'Data from github link had duplicated elements, DB Initialized without them ',
+                "Repeated element: "+repeated,
+                "Total elements inserted: "+ clean.length) ;
+        
+        console.log('Writing jokes in db') ;
+
+        /*
+            sqlite don't support create many from prisma, so lets
+            identify the db server in use and create elements 1 by 1 when sqlite
+        */
+        if(db._activeProvider == 'sqlite') {
+            for (const iterator of clean) {
+                await db.joke.create({
+                    data: iterator
+                });
+            }
+        } else {
+            await db.joke.createMany({
+                data: clean
+            })
+        }
+        
     }
     
 }
