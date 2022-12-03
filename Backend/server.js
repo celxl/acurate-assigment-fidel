@@ -35,7 +35,7 @@ app.use(cors()) ;
 glob.sync(`./app/endpoints/*${endpointsPrefix}`).forEach(function (file) {
     console.log('Adding API Rest endpoint for: ' + path.basename(file)) ;
     let endpoint = require(path.resolve(file)) ;
-    app.use(endpoint.base_uri, endpoint.router) ;
+    app.use('/api/v1'+endpoint.base_uri, endpoint.router) ;
 });
 
 
