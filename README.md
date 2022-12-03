@@ -68,3 +68,18 @@ ex **cd /Frontend**
     ```
 **Note:** Before run the angular app check */Frontend/src/environments/environment.ts* and make sure  
 **baseUrl** is pointing to backend server (host and port)
+
+## Some explications
+The task of the assignment is pretty straight forward but still few things that would like to explain
+1. The decision to put the randomize functionality on backend.  
+    Even when the data ids are consecutive 1,2,3 etc in a bit of more realistic app records can be remove from db breaking the ids continue sequence, which will end up with a 404 error if randomizing the joke desire returns an id that was removed, of course it could be handle but to re-randomize and do the api call again but not the must efficient thing to do.
+2. Since ids are a continue sequence we could just randomize id from 1 to biggest id, and return that joke, But where is the fun on that.  
+    Looking for a more realistic approach here (where there is not nice sequence to follow), will randomize the jokes by:  
+    1. batch considering a batch paginated result with some limit and some offset(page number), in a way to define a big number for the limit but not too big (went for 100 in this implementation) and to randomize the offset as page number between 0 and totalResult/limit and query for that batch 
+    2. use a cache system to store the jokes that have been already randomize for the last x seconds (30 s in this case), to ensure not to repeat same jokes withing x seconds. This cache will clear after x time passed or when all the jokes have been randomized so have to start from scratch
+3. Prisma ORM. I use to work a lot with sequelize.js orm for nodejs but recently discover prisma and find it more complete and easy to use, Plus the benefit it can work with several database servers.
+
+## Acknowledge
+Want to thanks in advance the time to take go through this evaluation, and spend your time on it.
+Also the time and the opportunity to be part of this process, no matter what happen next the I had fun doing the project.  
+Chears
