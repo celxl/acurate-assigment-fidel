@@ -5,6 +5,7 @@ const
     express = require('express'),
     app = express(),
     glob = require('glob'),
+    cors = require('cors'),
     exceptions = require('./app/utils/userFacingErrors'),
     path = require('path');
 
@@ -21,6 +22,7 @@ app.use(express.json()) ;
 //use morgan only when not in production
 process.env.NODE_ENV != "production" &&  app.use(require('morgan')('dev')) ;
 
+app.use(cors()) ;
 
 //add routes
 glob.sync(`./app/endpoints/*${endpointsPrefix}`).forEach(function (file) {
