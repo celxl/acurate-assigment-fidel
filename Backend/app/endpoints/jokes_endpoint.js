@@ -28,8 +28,6 @@ router.get('/',
 
 router.get('/randomize', async (req, res, next) => {
     try {
-        console.log
-        (req.headers);
         let result = await JokeService.getRandomJoke(req.headers.host, req.headers['user-agent']) ;
         res.json(result) ;
     } catch (error) {
