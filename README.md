@@ -53,7 +53,7 @@ ex **cd /Backend**
     ```
     npm run dev
     ```
-Considering the Backend installation was success you must a table "joke" created and the data inserted
+Considering the Backend installation was success you will see the *joke* created and the data inserted
 ### Frontend
 Frontend implementation use Angular framework  
 To follow below instructions first navigate to the Frontend root
